@@ -1,0 +1,14 @@
+{
+  "image": "mcr.microsoft.com/devcontainers/jekyll",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "formulahendry.auto-close-tag",
+        "formulahendry.auto-rename-tag",
+        "yzhang.markdown-all-in-one",
+        "DavidAnson.vscode-markdownlint",
+        "streetsidesoftware.code-spell-checker"
+      ]
+    }
+  }
+}
