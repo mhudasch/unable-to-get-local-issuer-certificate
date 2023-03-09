@@ -29,15 +29,13 @@ github_username: mhudasch
 # -----------------------------------------------------------------------------
 collections:
   tool_articles:
-   tool: true
-   output: true
+    output: true
+    permalink: /:collection/:name
 
 # -----------------------------------------------------------------------------
 # Theme
 # -----------------------------------------------------------------------------
 theme: minima
-minima:
-  skin: dark
 markdown: kramdown
 kramdown:
   syntax_highlighter: rouge
