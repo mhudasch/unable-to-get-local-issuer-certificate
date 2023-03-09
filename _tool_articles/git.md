@@ -1,6 +1,6 @@
 ---
-name: git
 layout: page
+name: git
 title: Git
 ---
 

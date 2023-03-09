@@ -3,9 +3,8 @@
 # To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 
 layout: home
+title: Home
 ---
-
-# Welcome to a page only dedicated to one error
 
 ## Want to know what the error means?
 
