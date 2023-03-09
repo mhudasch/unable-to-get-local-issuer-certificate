@@ -2,6 +2,7 @@
 layout: page
 title: About
 permalink: /about/
+order: 999
 ---
 
 This page is dedicated to one simple certificate issue.

@@ -2,6 +2,7 @@
 layout: page
 title: Further issue details
 permalink: /further-issue-details/
+order: 2
 ---
 
 When developing software or just when using some software you might come across a cryptic error message that contains the error string this web page is dedicated to:
