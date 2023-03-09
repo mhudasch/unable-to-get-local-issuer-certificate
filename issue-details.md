@@ -6,7 +6,7 @@ permalink: /further-issue-details/
 
 When developing software or just when using some software you might come across a cryptic error message that contains the error string this web page is dedicated to:
 
-```shell
+```text
 ... unable to get local issuer certificate ...
 ```
 
@@ -19,4 +19,4 @@ Again most times this is no problem because the software that you use has access
 3. Your certificate store is not up-to-date or the software you are using comes with its own store for trusted issuer certificates that is not up-to-date
 4. A combination of the ones above
 
-Many answers on pages like [stackoverflow](https://stackoverflow.com) or other user forums suggest just disabling the security option in the software you use by setting some option like `strict-ssl=false` or `validate-server-certificate=false` etc. or just use a `http` url instead to *fix* the issue an go on quickly. Please **DO NOT** do this because you are disabling security not fixing the issue. Please **DO** follow the steps provided below to actually fix the issue for your particular case and tool.
+Many answers on pages like [stackoverflow](https://stackoverflow.com) or other user forums suggest just disabling the security option in the software you use by setting some option like `strict-ssl=false` or `validate-server-certificate=false` etc. or just use a `http` (without the s) url instead to *fix* the issue an go on quickly. Please **DO NOT** do this because you are disabling security not fixing the issue. Please **DO** follow the steps provided below to actually fix the issue for your particular case and tool.
