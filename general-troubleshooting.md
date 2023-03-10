@@ -89,9 +89,18 @@ To update intermediate certificates, follow these steps:
 
 To update root CA certificates in Ubuntu Linux, follow these steps:
 
-- Install the ca-certificates package by running the following command in the terminal: `sudo apt-get install ca-certificates`
+- Install the ca-certificates package by running the following command in the terminal:
+
+  ```shell
+  sudo apt-get install ca-certificates
+  ```
+
 - Copy the new root CA certificate file to the `/usr/local/share/ca-certificates/` directory.
-- Run the following command in the terminal to update the certificate store: `sudo update-ca-certificates`
+- Run the following command in the terminal to update the certificate store:
+  
+  ```shell
+  sudo update-ca-certificates
+  ```
 
 To update intermediate certificates, follow these steps:
 
@@ -100,7 +109,7 @@ To update intermediate certificates, follow these steps:
 
 Note: The exact steps may vary depending on the Linux distribution and version.
 
-## SSL certificate chain issues
+## Detecting SSL certificate chain issues
 
 A server's SSL certificate may be missing one or more intermediate certificates in its chain, which are needed to establish trust between the root CA and the server's certificate.
 
