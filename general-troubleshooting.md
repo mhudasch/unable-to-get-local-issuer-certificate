@@ -117,7 +117,7 @@ A server's SSL certificate may be missing one or more intermediate certificates 
 
 The SSL certificate presented by the server may have been revoked by the issuing CA, or may have expired, leading to trust issues.
 
-First check the SSL certificate trust chain like described [here](#ssl-certificate-chain-issues). When the certificate is expired, you might have to update the certificate store of the operating system (like shown [here](#missing-or-outdated-root-ca-certificates)) or the certificate store of your program like shown [here](/{{site.baseurl}}/#want-a-solution-for-the-error).
+First check the SSL certificate trust chain like described [here](#detecting-ssl-certificate-chain-issues). When the certificate is expired, you might have to update the certificate store of the operating system (like shown [here](#missing-or-outdated-root-ca-certificates)) or the certificate store of your program like shown [here]({{ site.baseurl }}/#want-a-solution-for-the-error).
 
 An actual SSL certificate revocation might occur for several reasons like:
 
