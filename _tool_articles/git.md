@@ -16,7 +16,7 @@ Git is a free and open source distributed version control system designed to han
 
 [Official Documentation](https://git-scm.com/docs)
 
-You can always check the [general troubleshooting guide](../general-troubleshooting.md) before continuing.
+You can always check the [general troubleshooting guide]({{ site.baseurl }}/common/) before continuing.
 
 ## Issue sample
 
