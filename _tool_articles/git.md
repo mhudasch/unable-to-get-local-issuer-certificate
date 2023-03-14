@@ -64,7 +64,7 @@ When the version is higher than `7.60.0` you can configure Git to use the *schan
 git config --global http.sslBackend schannel
 ```
 
-This solution has the benefit that no certificate files have to be managed and which leaves the Windows Certificate Store as the single point of truth when it comes to certificate trust.
+This solution has the benefit that no certificate files have to be managed which leaves the Windows Certificate Store as the single point of truth when it comes to certificate trust.
 
 Links:
 
