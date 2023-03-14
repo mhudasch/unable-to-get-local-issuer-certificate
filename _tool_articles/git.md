@@ -70,7 +70,7 @@ Links:
 [schannel](https://learn.microsoft.com/en-us/windows/win32/secauthn/secure-channel)
 
 <!-- TODO: Write article about that -->
-[Convert Windows Certificate Store certificate into pem format](#)
+<!--[Convert Windows Certificate Store certificate into pem format](#)-->
 
 ## In Linux
 

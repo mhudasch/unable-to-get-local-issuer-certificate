@@ -8,7 +8,7 @@ first_name: Martin
 last_name: Hudasch
 # email: martin.hudasch@live.de
 description: > # the ">" symbol means to ignore newlines until "footer_text:"
-  Helping with one of the certificate issues of software development
+  Securing software development one step at a time.
 footer_text: >
   Made with ❤️ by Martin Hudasch
   Powered by <a href="https://jekyllrb.com/" target="_blank">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio">al-folio</a> theme.
