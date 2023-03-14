@@ -73,7 +73,7 @@ Links:
 [schannel](https://learn.microsoft.com/en-us/windows/win32/secauthn/secure-channel)
 
 <!-- TODO: Write article about that -->
-<!--[Convert Windows Certificate Store certificate into pem format](#)-->
+<!-- [Convert Windows Certificate Store certificate into pem format](#)-->
 
 ## Fix it in Linux
 
@@ -180,7 +180,9 @@ Links:
 ## Fix it in macOS
 
 Coming Soon...
-<!-- 
+
+<!--
+
 Install Git with cURL using Homebrew with the following command:
 
 ```sh
