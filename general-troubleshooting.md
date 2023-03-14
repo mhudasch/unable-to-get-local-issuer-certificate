@@ -113,6 +113,8 @@ Note: The exact steps may vary depending on the Linux distribution and version.
 
 A server's SSL certificate may be missing one or more intermediate certificates in its chain, which are needed to establish trust between the root CA and the server's certificate.
 
+<!-- TODO: add CURL and openSSL investigation -->
+
 ## Certificate revocation
 
 The SSL certificate presented by the server may have been revoked by the issuing CA, or may have expired, leading to trust issues.
