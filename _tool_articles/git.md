@@ -7,6 +7,9 @@ date: 2023-03-10
 published: true
 ---
 
+- Do not remove this line (it will not be displayed)
+{:toc}
+
 ## What is it?
 
 Git is a free and open source distributed version control system designed to handle everything from small to very large projects with speed and efficiency.
@@ -25,7 +28,7 @@ SSL Certificate problem: unable to get local issuer certificate.
 ...
 ```
 
-## In Windows
+## Fix it in Windows
 
 The Git for Windows installation brings its own certificate store with it. Trusted certificates are located in the directory `C:\Program Files\Git\mingw64\ssl\certs` and are saved in file called `ca-bundle.crt` or `ca-bundle.trust.crt`. The files contain certificates in the  [pem - Base64 format](https://en.wikipedia.org/wiki/Privacy-Enhanced_Mail).
 
@@ -72,7 +75,7 @@ Links:
 <!-- TODO: Write article about that -->
 <!--[Convert Windows Certificate Store certificate into pem format](#)-->
 
-## In Linux
+## Fix it in Linux
 
 Depending on your Linux distribution, the trusted certificates can be located in different directories. So convert your certificate into [pem - Base64 format](https://en.wikipedia.org/wiki/Privacy-Enhanced_Mail) and save it somewhere in your user directory. After that you can use a solution below that fits your distribution:
 
@@ -174,7 +177,7 @@ Links:
 
 [Linux certificate file/folder locations](https://serverfault.com/questions/62496/ssl-certificate-location-on-unix-linux/722646)
 
-## In macOS
+## Fix it in macOS
 
 Coming Soon...
 <!-- 
