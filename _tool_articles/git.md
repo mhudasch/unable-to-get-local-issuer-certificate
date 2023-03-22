@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: post
 name: Git
 title: Git
 category: tool_article
@@ -30,7 +30,7 @@ SSL Certificate problem: unable to get local issuer certificate.
 
 ## Fix it in Windows
 
-The Git for Windows installation brings its own certificate store with it. Trusted certificates are located in the directory `C:\Program Files\Git\mingw64\ssl\certs` and are saved in file called `ca-bundle.crt` or `ca-bundle.trust.crt`. The files contain certificates in the  [pem - Base64 format](https://en.wikipedia.org/wiki/Privacy-Enhanced_Mail).
+The Git for Windows installation brings its own certificate store with it. Trusted certificates are located in the directory `C:\Program Files\Git\mingw64\ssl\certs` and are saved in file called `ca-bundle.crt` or `ca-bundle.trust.crt`. The files contain certificates in the [pem - Base64 format](https://en.wikipedia.org/wiki/Privacy-Enhanced_Mail).
 
 ### Solution 1
 

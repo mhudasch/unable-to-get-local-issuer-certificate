@@ -6,8 +6,9 @@ permalink: /tool-list/
 
 Checkout the help articles for different tools:
 
-{% for tool in site.tool_articles %}
+{% assign tools_by_name = site.tool_articles | sort: "name" %}
+{%- for tool in tools_by_name -%}
 
 - [{{ tool.name }}]({{ tool.url | relative_url }})
 
-{% endfor %}
+{%- endfor -%}
