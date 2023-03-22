@@ -10,9 +10,7 @@ last_name: Hudasch
 description: > # the ">" symbol means to ignore newlines until "footer_text:"
   Securing software development one step at a time.
 footer_text: >
-  Made with ❤️ by Martin Hudasch
-  Powered by <a href="https://jekyllrb.com/" target="_blank">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio">al-folio</a> theme.
-  Hosted by <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>.
+  Made with ❤️ by <a href="https://github.com/mhudasch" target="_blank" rel="noopener noreferrer" title="github">Martin Hudasch</a> | Hosted by <a href="https://pages.github.com/" target="_blank" rel="noopener noreferrer">GitHub Pages</a>.
 keywords: certificate, unable, issuer, ruby, dotnet, nuget, msys, pip, python  # add your own keywords or leave empty
 
 lang: en # the language of your site (for example: en, fr, cn, ru, etc.)

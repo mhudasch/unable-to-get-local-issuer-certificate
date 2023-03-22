@@ -8,6 +8,6 @@ Checkout the help articles for different tools:
 
 {% for tool in site.tool_articles %}
 
-- [{{ tool.name }}]({{ site.baseurl }}{{ tool.url }})
+- [{{ tool.name }}]({{ tool.url | relative_url }})
 
 {% endfor %}

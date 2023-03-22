@@ -1,6 +1,6 @@
 ---
 layout: page
-name: git
+name: Git
 title: Git
 category: tool_article
 date: 2023-03-10
@@ -66,7 +66,7 @@ git config --global http.sslBackend schannel
 
 This solution has the benefit that no certificate files have to be managed which leaves the Windows Certificate Store as the single point of truth when it comes to certificate trust.
 
-Links:
+<h3 id="windows-links">Links</h3>
 
 [git config](https://www.git-scm.com/docs/git-config#Documentation/git-config.txt-httpsslCAInfo)
 
@@ -171,7 +171,7 @@ git config --global http.sslCAInfo /etc/ssl/cert.pem
 
 Alternatively you can set the `GIT_SSL_CAINFO` environment variable.
 
-Links:
+<h3 id="linux-links">Links</h3>
 
 [git config](https://www.git-scm.com/docs/git-config#Documentation/git-config.txt-httpsslCAInfo)
 
