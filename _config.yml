@@ -24,7 +24,7 @@ github_username: mhudasch
 # -----------------------------------------------------------------------------
 # Theme
 # -----------------------------------------------------------------------------
-theme: just-the-docs
+remote_theme: just-the-docs
 # Color scheme supports "light" (default) and "dark"
 color_scheme: dark
 
