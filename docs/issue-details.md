@@ -1,8 +1,25 @@
 ---
-layout: page
+layout: default
 title: Further issue details
 permalink: /further-issue-details/
+nav_order: 1
 ---
+
+# {{ page.title }}
+{: .no_toc }
+
+Do you want to know more about what caused the issue?
+{: .fs-6 .fw-300 }
+
+## Table of contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
+
+## Issue Description
 
 When developing software or just when using some software you might come across a cryptic error message that contains the error string this web page is dedicated to:
 

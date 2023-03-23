@@ -3,10 +3,22 @@ css: toc
 layout: page
 title: General Troubleshooting
 permalink: /common/
+nav_order: 2
 ---
 
-- Do not remove this line (it will not be displayed)
+# {{ page.title }}
+{: .no_toc }
+
+Depending on the used tool or operating system the fix might differ but here are some general causes for the issues an their fixes.
+{: .fs-4 .fw-100 }
+
+## Table of contents
+{: .no_toc .text-delta }
+
+1. TOC
 {:toc}
+
+---
 
 ## Missing or outdated root CA certificates
 

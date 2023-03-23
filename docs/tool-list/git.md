@@ -1,14 +1,26 @@
 ---
-layout: post
+layout: page
 name: Git
 title: Git
-category: tool_article
+parent: Troubleshooting by Tool
+
 date: 2023-03-10
 published: true
 ---
 
-- Do not remove this line (it will not be displayed)
+# {{ page.title }}
+{: .no_toc }
+
+<details open markdown="block">
+  <summary>
+    Table of contents
+  </summary>
+  {: .text-delta }
+1. TOC
 {:toc}
+</details>
+
+---
 
 ## What is it?
 
@@ -42,7 +54,7 @@ The drawback of that solution is that the file(s) get updated every time Git for
 Another solution is to place a certificate store (crt) file somewhere in your user directory and insert your missing certificate in that file.
 Now you can use the following command to let Git use that file instead of its own:
 
-```cmd
+```shell
 git config --global http.sslCAInfo "%USERPROFILE%\<filepath to ca-trusted.crt>"
 ```
 
@@ -54,7 +66,7 @@ This solution has a similar drawback. When certificates in the store  file, whic
 
 All Git network traffic is performed by cURL. The cURL executable used by Git for Windows is can be found at the location `C:\Program Files\Git\mingw64\bin\curl.exe`. Git uses this cURL executable unless the `PATH` environment variable contains another path to a cURL executable with higher precedence. Since cURL version `7.60.0`, the Windows native Secure Channel (schannel) is supported which can utilize the certificates located in the Windows Certificate Store. To check if your Git for Windows installation uses a compatible version run the following command:
 
-```cmd
+```shell
 "C:\Program Files\Git\mingw64\bin\curl.exe" --version
 ```
 
