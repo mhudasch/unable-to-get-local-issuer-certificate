@@ -9,7 +9,7 @@ tool_description: >
 tool_docs: https://nodejs.org/en/docs
 
 date: 2023-03-22
-published: false
+published: true
 ---
 
 {% capture sample %}
@@ -51,7 +51,7 @@ Or for all following shell sessions by executing the following script:
 setx NODE_EXTRA_CA_CERTS <path to pem file>
 ```
 
-{: .important }
+{: .note }
 The path to the pem file can be absolute or relative.
 
 The documentation for the environment variable can be found [here](https://nodejs.org/api/cli.html#node_extra_ca_certsfile).
