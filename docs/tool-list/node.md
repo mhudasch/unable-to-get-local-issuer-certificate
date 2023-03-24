@@ -1,32 +1,29 @@
 ---
-layout: post
+layout: tool
 name: Node
-title: Node (node.js)
-category: tool_article
+title: Node.js
+parent: Troubleshooting by Tool
+
+tool_description: >
+  Node.js is an open-source, cross-platform JavaScript runtime environment.
+tool_docs: https://nodejs.org/en/docs
+
 date: 2023-03-22
 published: false
 ---
 
-- Do not remove this line (it will not be displayed)
-{:toc}
-
-## What is it?
-
-Node.js® is an open-source, cross-platform JavaScript runtime environment.
-
-[Official Documentation](https://nodejs.org/en/docs)
-
-You can always check the [general troubleshooting guide]({{ site.baseurl }}/common/) before continuing.
-
-## Issue sample
-
-The error might look like this when using Git:
+{% capture sample %}
+The error might look like this when using {{ page.title }}:
 
 ```text
 ...
 fatal: unable to access <URL>: SSL certificate problem: unable to get local issuer certificate
 ...
 ```
+
+{% endcapture %}
+
+{% include tool_head.md issue_sample=sample -%}
 
 ## All platforms
 
@@ -44,23 +41,24 @@ When you the certificates in your company are rolled out with group policies or 
 
 This can be done for the current shell session by executing the following script:
 
-```cmd
+```shell
 set NODE_EXTRA_CA_CERTS=<path to pem file>
 ```
 
 Or for all following shell sessions by executing the following script:
 
-```cmd
+```shell
 setx NODE_EXTRA_CA_CERTS <path to pem file>
 ```
 
-Note: The path to the pem file can be absolute or relative.
+{: .important }
+The path to the pem file can be absolute or relative.
 
 The documentation for the environment variable can be found [here](https://nodejs.org/api/cli.html#node_extra_ca_certsfile).
 
 ## Fix it in Linux / macOS
 
-Node.js comes with its own store of trustworthy certificates, that are updated with each update of Node.js. The store can only be extended by creating a central file that contains additional certificates in [pem - Base64 format](https://en.wikipedia.org/wiki/Privacy-Enhanced_Mail). Node.js supports an environment variable `NODE_EXTRA_CA_CERTS` that points to the aforementioned central file.
+Node.js comes with its own store of trustworthy certificates, that are updated with each update of Node.js. The store can only be extended by creating a central file that contains additional certificates in [pem - Base64 format](https://en.wikipedia.org/wiki/Privacy-Enhanced_Mail). Node.js supports uses the environment variable `NODE_EXTRA_CA_CERTS` that points to the aforementioned central file.
 
 Depending on your Linux distribution, the trusted certificates are already one file in [pem - Base64 format](https://en.wikipedia.org/wiki/Privacy-Enhanced_Mail) (crt file) or can easily copied into one file. Finally you have the point the environment variable `NODE_EXTRA_CA_CERTS` to that one file.
 

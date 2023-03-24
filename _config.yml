@@ -30,10 +30,11 @@ color_scheme: dark
 
 markdown: kramdown
 kramdown:
+  parse_block_html: true
   syntax_highlighter: rouge
   input: GFM
-  auto_ids:       true
-  toc_levels:     1..3
+  auto_ids: true
+  toc_levels: 1..3
 # For copy button on code
 enable_copy_code_button: true
 # Enable or disable the site search
@@ -91,6 +92,10 @@ gh_edit_repository: "https://github.com/mhudasch/unable-to-get-local-issuer-cert
 gh_edit_branch: "gh-pages" # the branch that your docs is served from
 # gh_edit_source: docs # the source that your files originate from
 gh_edit_view_mode: "tree" # "tree" or "edit" if you want the user to jump into the editor immediately
+
+callouts:
+  note:
+   warning: Note
 
 # -----------------------------------------------------------------------------
 # Plugin

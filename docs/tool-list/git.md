@@ -1,44 +1,29 @@
 ---
-layout: page
+layout: tool
 name: Git
 title: Git
 parent: Troubleshooting by Tool
+
+tool_description: >
+  Git is a free and open source distributed version control system designed to handle everything from small to very large projects with speed and efficiency.
+tool_docs: https://git-scm.com/docs
 
 date: 2023-03-10
 published: true
 ---
 
-# {{ page.title }}
-{: .no_toc }
-
-<details open markdown="block">
-  <summary>
-    Table of contents
-  </summary>
-  {: .text-delta }
-1. TOC
-{:toc}
-</details>
-
----
-
-## What is it?
-
-Git is a free and open source distributed version control system designed to handle everything from small to very large projects with speed and efficiency.
-
-[Official Documentation](https://git-scm.com/docs)
-
-You can always check the [general troubleshooting guide]({{ site.baseurl }}/common/) before continuing.
-
-## Issue sample
-
-The error might look like this when using Git:
+{% capture sample %}
+The error might look like this when using {{ page.title }}:
 
 ```text
 ...
 SSL Certificate problem: unable to get local issuer certificate.
 ...
 ```
+
+{% endcapture %}
+
+{% include tool_head.md issue_sample=sample -%}
 
 ## Fix it in Windows
 
