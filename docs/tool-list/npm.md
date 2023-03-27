@@ -62,7 +62,7 @@ The solutions above, when already configured, might also be the source of other 
 
 - `.npmrc` file (ca setting)
 - `.npmrc` file (cafile setting)
-- NODE_EXTRA_CA_CERTS environment variable
+- `NODE_EXTRA_CA_CERTS` environment variable
 
 **Do not** use settings like `npm set strict-ssl=false` or `NODE_TLS_REJECT_UNAUTHORIZED=0` because they disable the security feature completely even if you are using a self-signed certificate. It is always better to secure the SSL connection by making a certificate known to npm/Node.js.
 {: .warning}
