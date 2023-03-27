@@ -58,7 +58,11 @@ ca[] = "-----BEGIN CERTIFICATE-----\n<base64 cert (.pem/.CER)>\n-----END CERTIFI
 ca[] = "-----BEGIN CERTIFICATE-----\n<base64 cert (.pem/.CER)>\n-----END CERTIFICATE-----"
 ```
 
-The solutions above, when already configured, might also be the source of other certificate problems, so check 
+The solutions above, when already configured, might also be the source of other certificate problems, so always check these places for a correct configuration:
+
+- `.npmrc` file (ca setting)
+- `.npmrc` file (cafile setting)
+- NODE_EXTRA_CA_CERTS environment variable
 
 **Do not** use settings like `npm set strict-ssl=false` or `NODE_TLS_REJECT_UNAUTHORIZED=0` because they disable the security feature completely even if you are using a self-signed certificate. It is always better to secure the SSL connection by making a certificate known to npm/Node.js.
 {: .warning}
