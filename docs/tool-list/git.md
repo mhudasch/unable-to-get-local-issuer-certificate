@@ -2,6 +2,7 @@
 layout: tool
 name: Git
 title: Git
+permalink: /tools/git
 parent: Troubleshooting by Tool
 
 tool_description: >

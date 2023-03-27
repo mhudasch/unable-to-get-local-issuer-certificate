@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Troubleshooting by Tool
-permalink: /tool-list/
+permalink: /tools/
 nav_order: 3
 has_children: true
 has_toc: true

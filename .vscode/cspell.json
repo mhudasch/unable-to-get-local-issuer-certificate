@@ -24,7 +24,7 @@
     },
     {
       "name": "jekyllWords",
-      "path": "./dict/jekyllWords.txt"
+      "path": "./dict/jekyll-words.txt"
     }
   ],
   "dictionaries": [

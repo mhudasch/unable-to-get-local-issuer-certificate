@@ -1,6 +1,6 @@
 ---
 layout: home
-title: Welcome to a page only dedicated to one error
+title: Welcome to a page dedicated to one error
 nav_exclude: true
 ---
 

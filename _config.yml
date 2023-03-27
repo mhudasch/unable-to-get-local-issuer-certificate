@@ -16,6 +16,8 @@ keywords: certificate, unable, issuer, ruby, dotnet, nuget, msys, pip, python  #
 lang: en # the language of your site (for example: en, fr, cn, ru, etc.)
 locale: en_US
 
+# favicon source: https://www.svgrepo.com/svg/444987/certificate-key-solid
+
 url: https://unable-to-get-local-issuer-certificate.com # the base hostname & protocol for your site
 baseurl: / # the subpath of your site, e.g. /blog/
 impressum_path:  # set to path to include impressum link in the footer, use the same path as permalink in a page, helps to conform with EU GDPR
@@ -104,8 +106,4 @@ plugins:
 # -----------------------------------------------------------------------------
 # Collections
 # -----------------------------------------------------------------------------
-collections:
-  # tools
-  tool_articles:
-    output: true
-    permalink: /:collection/:name
+
