@@ -45,6 +45,19 @@ Many answers on pages like [stackoverflow](https://stackoverflow.com) or other u
 
 Please **DO NOT** do this because you are disabling security entirely and not fixing the root cause of the issue. Please **DO** follow the steps provided here to actually fix the issue for your particular case and tool.
 
+## SSL or TLS?
+
+> SSL is the old name. It is called TLS these days.
+{: .fs-4 .fw-400}
+
+Source: [curl documentation](https://curl.se/docs/sslcerts.html)
+{: .fs-1}
+
+> TLS is a proposed Internet Engineering Task Force (IETF) standard, first defined in 1999, and the current version is TLS 1.3, defined in August 2018. TLS builds on the now-deprecated SSL (Secure Sockets Layer) specifications (1994, 1995, 1996) developed by Netscape Communications for adding the HTTPS protocol to their Navigator web browser.
+
+Source: [Wikipedia](https://en.wikipedia.org/wiki/Transport_Layer_Security)
+{: .fs-1}
+
 ## Going a bit deeper
 
 ### The SSL trust hierarchy

@@ -19,5 +19,7 @@ You can always check the  [general troubleshooting guide]({{ 'common' | relative
 
 ## Issue sample
 
+The error might look like this when using {{ page.title }}:
+
 {{ include.issue_sample }}
 {% endif %}

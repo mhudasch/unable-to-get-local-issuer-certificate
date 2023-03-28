@@ -87,7 +87,8 @@ To update root CA certificates in macOS using the command-line, follow these ste
 
   Replace `<path to certificate file>` with the path to the new root CA certificate file.
 
-Note: The `sudo` command is used to run the security command with administrator privileges.
+The `sudo` command is used to run the security command with administrator privileges.
+{: .note}
 
 To update intermediate certificates, follow these steps:
 
@@ -97,35 +98,74 @@ To update intermediate certificates, follow these steps:
 - Drag and drop the new intermediate certificate file into the Keychain Access window.
 - Double-click on the imported certificate, expand the "Trust" section, and ensure that the "Always Trust" option is - selected.
 
-### Linux (Ubuntu)
+### Linux
 
-To update root CA certificates in Ubuntu Linux, follow these steps:
+Depending on your Linux distribution, the root CA certificates can be located in different directories. Some might store the certificate files each as separate [pem - Base64 format](https://en.wikipedia.org/wiki/Privacy-Enhanced_Mail) files in a directory. Others have one so-called bundle file which contains all root CA certificates. Files containing one or more certificates as *x509 PEM - Base64 strings* have typically the file extension `.pem` or `.crt`.
+
+#### Debian / Ubuntu / Gentoo etc
+
+To update root CA certificates, follow these steps:
 
 - Install the ca-certificates package by running the following command in the terminal:
 
-  ```shell
+  ```bash
   sudo apt-get install ca-certificates
   ```
 
 - Copy the new root CA certificate file to the `/usr/local/share/ca-certificates/` directory.
 - Run the following command in the terminal to update the certificate store:
   
-  ```shell
+  ```bash
   sudo update-ca-certificates
   ```
 
 To update intermediate certificates, follow these steps:
 
 - Copy the new intermediate certificate file to the `/usr/local/share/ca-certificates/` directory.
-- Run the sudo `update-ca-certificates` command to update the certificate store.
+- Run the `sudo update-ca-certificates` command to update the certificate store.
 
-Note: The exact steps may vary depending on the Linux distribution and version.
+The `sudo` command is used to run the security command with administrator privileges.
+{: .note}
 
-## Detecting SSL certificate chain issues
+#### Fedora / Red Head Enterprise Linux 6
 
-A server's SSL certificate may be missing one or more intermediate certificates in its chain, which are needed to establish trust between the root CA and the server's certificate.
+To update root CA certificates, copy the text content of your certificate at the end of the file located at `/etc/pki/tls/certs/ca-bundle.crt`.
 
-<!-- TODO: add CURL and openSSL investigation -->
+#### OpenSUSE
+
+To update root CA certificates, copy the text content of your certificate at the end of the file located at `/etc/ssl/ca-bundle.pem`.
+
+#### OpenELEC
+
+To update root CA certificates, copy the text content of your certificate at the end of the file located at `/etc/pki/tls/cacert.pem`.
+
+#### Amazon Linux / CentOS / Red Head Enterprise Linux 7
+
+To update root CA certificates, follow these steps:
+
+- Copy your certificate file into `/etc/pki/ca-trust/source/anchors/` with:
+
+  ```bash
+  sudo cp <path to pem file> /etc/pki/ca-trust/source/anchors/
+  ```
+
+- Run the following command in the terminal to update the certificate store:
+
+  ```bash
+  sudo update-ca-trust extract
+  ```
+
+The `sudo` command is used to run the security command with administrator privileges.
+{: .note}
+
+#### Alpine Linux
+
+To update root CA certificates, copy the text content of your certificate at the end of the file located at `/etc/ssl/cert.pem`.
+
+---
+
+Thanks to the article [here](https://serverfault.com/questions/62496/ssl-certificate-location-on-unix-linux/722646), I found some of the certificate file locations for various Linux distributions. I want to very much thank/credit all the contributers in the posts over there. Contributors are still adding more and more locations, so if you could not find the location or guide for your distribution here you could check there as well.
+{: .note}
 
 ## Certificate revocation
 
@@ -152,3 +192,117 @@ SSL certificate revocation is an important mechanism for maintaining the integri
 To resolve the issue when using a self-signed SSL certificate, the certificate needs to be manually added to the trusted certificates list on the client-side. This will enable the program or application to establish a secure and encrypted connection with the server using the self-signed SSL certificate.
 
 However, it's important to note that relying on self-signed certificates for secure communication is generally discouraged, as it can leave users vulnerable to man-in-the-middle attacks and other security risks. In production environments, it's recommended to use SSL certificates issued by trusted third-party CAs to ensure the highest level of security and trust.
+
+## Detecting SSL certificate chain issues
+
+A server's SSL certificate may be missing one or more intermediate certificates in its chain, which are needed to establish trust between the root CA and the server's certificate.
+
+### Investigate using curl
+
+When you have curl installed on your machine you can investigate certificate issues using the command-line. This is especially handy when the framework or app that thew the issue uses libcurl under the hood to perform its network traffic.
+
+You can use the following command to show SSL/TLS connection details using curl:
+
+```bash
+curl -iLv https://github.com
+```
+
+{: .note}
+`-i` to include the HTTP response headers in the output.
+`-L` to include HTTP location headers in the output.
+`-v` Outputs the previous infos in a verbose manner.
+
+An output can look like this:
+
+```text
+* Uses proxy env variable https_proxy == 'http://localhost:9000'
+*   Trying 127.0.0.1:9000...
+* Connected to localhost (127.0.0.1) port 9000 (#0)
+* allocate connect buffer
+* Establish HTTP proxy tunnel to github.com:443
+> CONNECT github.com:443 HTTP/1.1
+> Host: github.com:443
+> User-Agent: curl/8.0.1
+> Proxy-Connection: Keep-Alive
+>
+< HTTP/1.1 200 Connection Established
+HTTP/1.1 200 Connection Established
+< Proxy-Agent: ...
+Proxy-Agent: ...
+<
+
+* CONNECT phase completed
+* CONNECT tunnel established, response 200
+* ALPN: offers h2,http/1.1
+* TLSv1.3 (OUT), TLS handshake, Client hello (1):
+*  CAfile: ...
+*  CApath: ...
+* TLSv1.3 (IN), TLS handshake, Server hello (2):
+* TLSv1.3 (IN), TLS handshake, Encrypted Extensions (8):
+* TLSv1.3 (IN), TLS handshake, Certificate (11):
+* TLSv1.3 (IN), TLS handshake, CERT verify (15):
+* TLSv1.3 (IN), TLS handshake, Finished (20):
+* TLSv1.3 (OUT), TLS change cipher, Change cipher spec (1):
+* TLSv1.3 (OUT), TLS handshake, Finished (20):
+* SSL connection using TLSv1.3 / TLS_AES_128_GCM_SHA256
+* ALPN: server accepted h2
+* Server certificate:
+*  subject: C=US; ST=California; L=San Francisco; O=GitHub, Inc.; CN=github.com
+*  start date: ...
+*  expire date: ...
+*  subjectAltName: host "github.com" matched cert's "github.com"
+*  issuer: C=US; O=DigiCert Inc; CN=DigiCert TLS Hybrid ECC SHA384 2020 CA1
+*  SSL certificate verify ok.
+* using HTTP/2
+* h2h3 [:method: GET]
+* h2h3 [:path: /]
+* h2h3 [:scheme: https]
+* h2h3 [:authority: github.com]
+* h2h3 [user-agent: curl/8.0.1]
+* h2h3 [accept: */*]
+* Using Stream ID: ....
+> GET / HTTP/2
+> Host: github.com
+> user-agent: curl/8.0.1
+> accept: */*
+>
+* TLSv1.3 (IN), TLS handshake, Newsession Ticket (4):
+* TLSv1.3 (IN), TLS handshake, Newsession Ticket (4):
+...
+<HTTP HEADERS / HTML content>
+```
+
+The first lines show us that the communication goes through a proxy (for test purposes here). This fact often gets overlooked when investigating certificate issues. The certificate issues might already occur in the communication with your proxy and not event the target website.
+
+The next lines show the SSL/TLS handshake with the target website (here: github.com). The first important lines here are the used `CAfile/CApath` configurations. This is the source for trusted certificates. When we have issues as explained in the other paragraphs, then it is very likely that it has to do with the state of this configuration. After that we focus on the part that says `CERT verify`. When there are issues with the root CA certificate or the certificate chain, errors will pop up here.
+
+An error output would look like this:
+
+```text
+...
+
+*  CAfile: ...
+*  CApath: ...
+* TLSv1.3 (IN), TLS handshake, Server hello (2):
+* TLSv1.3 (OUT), TLS change cipher, Change cipher spec (1):
+* TLSv1.3 (OUT), TLS handshake, Client hello (1):
+* TLSv1.3 (IN), TLS handshake, Server hello (2):
+* TLSv1.3 (IN), TLS handshake, Encrypted Extensions (8):
+* TLSv1.3 (IN), TLS handshake, Certificate (11):
+* TLSv1.3 (OUT), TLS alert, unknown CA (560):
+* SSL certificate problem: unable to get local issuer certificate
+* Closing connection 0
+curl: (60) SSL certificate problem: unable to get local issuer certificate
+
+...
+```
+
+And here is the error this page is dedicated to 😄.
+Since the error/alert says `unknown CA`, we can conclude that the provided `CAfile/CApath` configuration does not contain information about **C**ertificate **A**uthority of the given server certificate. Usually this means the root CA certificate is not part of our certificate store.
+To investigate further we might use openSSL.
+
+### Investigate with openSSL
+
+Coming soon™...
+
+<!-- TODO: add CURL and openSSL investigation (https://curl.se/docs/sslcerts.html) -->

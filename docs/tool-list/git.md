@@ -14,7 +14,6 @@ published: true
 ---
 
 {% capture sample %}
-The error might look like this when using {{ page.title }}:
 
 ```text
 ...
@@ -26,7 +25,7 @@ SSL Certificate problem: unable to get local issuer certificate.
 
 {% include tool_head.md issue_sample=sample -%}
 
-## Fix it in Windows
+## Windows
 
 The Git for Windows installation brings its own certificate store with it. Trusted certificates are located in the directory `C:\Program Files\Git\mingw64\ssl\certs` and are saved in file called `ca-bundle.crt` or `ca-bundle.trust.crt`. The files contain certificates in the [pem - Base64 format](https://en.wikipedia.org/wiki/Privacy-Enhanced_Mail).
 
@@ -58,7 +57,7 @@ All Git network traffic is performed by cURL. The cURL executable used by Git fo
 
 When the version is higher than `7.60.0` you can configure Git to use the *schannel* as the SSL-Backend by executing the following command:
 
-```cmd
+```shell
 git config --global http.sslBackend schannel
 ```
 
@@ -66,114 +65,30 @@ This solution has the benefit that no certificate files have to be managed which
 
 <h3 id="windows-links">Links</h3>
 
-[git config](https://www.git-scm.com/docs/git-config#Documentation/git-config.txt-httpsslCAInfo)
-
-[schannel](https://learn.microsoft.com/en-us/windows/win32/secauthn/secure-channel)
+[Documentation of `git config`](https://www.git-scm.com/docs/git-config#Documentation/git-config.txt-httpsslCAInfo)<br>
+[Documentation of Native Windows Certificate Verification (Schannel)](https://learn.microsoft.com/en-us/windows/win32/secauthn/secure-channel)
 
 <!-- TODO: Write article about that -->
 <!-- [Convert Windows Certificate Store certificate into pem format](#)-->
 
-## Fix it in Linux
+## Linux
 
-Depending on your Linux distribution, the trusted certificates can be located in different directories. So convert your certificate into [pem - Base64 format](https://en.wikipedia.org/wiki/Privacy-Enhanced_Mail) and save it somewhere in your user directory. After that you can use a solution below that fits your distribution:
+Depending on your Linux distribution, the trusted certificates can be located in different directories. So convert your certificate into [pem - Base64 format](https://en.wikipedia.org/wiki/Privacy-Enhanced_Mail) and save it somewhere in your user directory. After that follow the guide [here]({{ '/common/#linux' | relative_url }}) to put the certificate in right location for your Linux distribution.
 
-### Debian / Ubuntu / Gentoo etc
-
-Copy your pem file into `/usr/local/share/ca-certificates/` with:
+If your Linux distribution bundles the trusted certificates in one file you can use the following git command to share this info with git:
 
 ```bash
-sudo cp <path to pem file> /usr/local/share/ca-certificates/
+git config --global http.sslCAInfo <path to pem/crt file>
 ```
 
-Update the certificate store with:
+Or if your Linux distribution stores the trusted certificates in separate file in a directory you can use the following git command:
 
 ```bash
-sudo update-ca-certificates
+git config --global http.sslCAPath <path to cert directory>
 ```
 
-Configure Git to use the same directory to verify certificates using:
-
-```bash
-git config --global http.sslCAPath /usr/local/share/ca-certificates/
-```
-
-Alternatively you can set the `GIT_SSL_CAPATH` environment variable.
-
-### Fedora / Red Head Enterprise Linux 6
-
-Copy the text content of your pem file at the end of the file located at `/etc/pki/tls/certs/ca-bundle.crt`.
-
-Configure Git to use the same file to verify certificates using:
-
-```bash
-git config --global http.sslCAInfo /etc/pki/tls/certs/ca-bundle.crt
-```
-
-Alternatively you can set the `GIT_SSL_CAINFO` environment variable.
-
-### OpenSUSE
-
-Copy the text content of your pem file at the end of the file located at `/etc/ssl/ca-bundle.pem`.
-
-Configure Git to use the same file to verify certificates using:
-
-```bash
-git config --global http.sslCAInfo /etc/ssl/ca-bundle.pem
-```
-
-Alternatively you can set the `GIT_SSL_CAINFO` environment variable.
-
-### OpenELEC
-
-Copy the text content of your pem file at the end of the file located at `/etc/pki/tls/cacert.pem`.
-
-Configure Git to use the same file to verify certificates using:
-
-```bash
-git config --global http.sslCAInfo /etc/pki/tls/cacert.pem
-```
-
-Alternatively you can set the `GIT_SSL_CAINFO` environment variable.
-
-### Amazon Linux / CentOS / Red Head Enterprise Linux 7
-
-Copy your pem file into `/etc/pki/ca-trust/source/anchors/` with:
-
-```bash
-sudo cp <path to pem file> /etc/pki/ca-trust/source/anchors/
-```
-
-Update the certificate store with:
-
-```bash
-sudo update-ca-trust extract
-```
-
-Configure Git to use the same directory to verify certificates using:
-
-```bash
-git config --global http.sslCAPath /etc/pki/ca-trust/source/anchors/
-```
-
-Alternatively you can set the `GIT_SSL_CAPATH` environment variable.
-
-### Alpine Linux
-
-Copy the text content of your pem file at the end of the file located at `/etc/ssl/cert.pem`.
-
-Configure Git to use the same file to verify certificates using:
-
-```bash
-git config --global http.sslCAInfo /etc/ssl/cert.pem
-```
-
-Alternatively you can set the `GIT_SSL_CAINFO` environment variable.
-
-<h3 id="linux-links">Links</h3>
-
-[git config](https://www.git-scm.com/docs/git-config#Documentation/git-config.txt-httpsslCAInfo)
-
-[Linux certificate file/folder locations](https://serverfault.com/questions/62496/ssl-certificate-location-on-unix-linux/722646)
+Alternatively you can set the `GIT_SSL_CAINFO` or `GIT_SSL_CAPATH` environment variable respectively.
+The documentation for the git configuration regarding certificate locations can be found [here](https://www.git-scm.com/docs/git-config#Documentation/git-config.txt-httpsslCAInfo).
 
 ## Fix it in macOS
 

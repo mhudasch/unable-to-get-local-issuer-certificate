@@ -14,7 +14,6 @@ published: true
 ---
 
 {% capture sample %}
-The error might look like this when using {{ page.title }}:
 
 ```text
 ...
