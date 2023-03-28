@@ -1,20 +1,22 @@
 ---
 layout: tool
-name: yarn
-title: yarn
+name: Yarn
+title: Yarn
 permalink: /tools/yarn
 parent: Troubleshooting by Tool
 
 tool_description: >
-  yarn is an alternative package manager for the Node.js runtime.
-tool_docs: https://docs.npmjs.com/
+  Yarn is an alternative to npm as package manager for the Node.js runtime.
+tool_docs: https://yarnpkg.com/getting-started
 
-date: 2023-03-27
-published: false
+date: 2023-03-28
+published: true
 ---
 
 {% capture sample %}
 The error might look like this when using {{ page.title }}:
+
+Yarn 1.x
 
 ```text
 ...
@@ -25,23 +27,40 @@ Trace:
 ...
 ```
 
+Yarn 2.x
+
+```text
+...
+YN0001: │ GotError: unable to get local issuer certificate
+...
+```
+
 {% endcapture %}
 
 {% include tool_head.md issue_sample=sample -%}
 
 ## All Platforms
 
-Npm has multiple configurations to enable additional trusted certificates.
+### Yarn 1.x
 
-Npm supports the `NODE_EXTRA_CA_CERTS` environment variable as described in the guide for [Node.js]({{ '/docs/tool-list/node' | relative_url }}).
+Yarn 1.x takes many configurations directly from Npm by reading the `.npmrc` and supports the Node.js environment variables. For that reason you can follow the guid for npm [here]({{ '/tools/npm' | relative_url }}).
 
-In isolation, Npm can be configured to use a central file for trusted certificates (bundle file) in [pem - Base64 format](https://en.wikipedia.org/wiki/Privacy-Enhanced_Mail). This configuration can be done by using the following command (make entries into `.npmrc` file):
+### Yarn 2.x
 
-```shell
-npm config set cafile "<path to pem file>"
+Yarn 2.x doesn't use the configuration from your `.npmrc` files anymore; it instead reads all of the configuration from the `.yarnrc.yml` files whose available settings can be found [here](https://yarnpkg.com/configuration/yarnrc). The `.yarnrc.yml` file must be placed inside your Node.js project and not inside your user directory in order to work correctly.
+
+This means that configurations for certificates must be done inside `.yarnrc.yml`. You can configure Yarn to use a central trusted CA certificate bundle file in [pem - Base64 format](https://en.wikipedia.org/wiki/Privacy-Enhanced_Mail) using the following entry in the config file:
+
+```yaml
+# .yarnrc.yml
+
+caFilePath: "<path to pem file>"
 ```
 
-[Documentation for configuration](https://docs.npmjs.com/cli/using-npm/config)
+The path to the pem file can be absolute or relative.
+{: .note }
 
-**Do not** use settings like `yarn config set enableStrictSsl false` or `yarn config set "strict-ssl" false` because they disable the security feature completely even if you are using a self-signed certificate. It is always better to secure the SSL connection by making a certificate known to npm/Node.js.
+Another configuration would be `httpsCertFilePath` which works like `caFilePath` but for the whole SSL certificate chain and not only the trusted root CA certificate. So if you have problems with intermediate certificates, this would be the place to check.
+
+**Do not** use settings like `yarn config set enableStrictSsl false` or `npm config set strict-ssl false` because they disable the security feature completely even if you are using a self-signed certificate. It is always better to secure the SSL connection by making a certificate known to npm/Node.js.
 {: .warning}

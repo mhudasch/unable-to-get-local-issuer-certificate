@@ -1,12 +1,12 @@
 ---
 layout: tool
-name: npm
-title: npm
+name: Npm
+title: Npm
 permalink: /tools/npm
 parent: Troubleshooting by Tool
 
 tool_description: >
-  npm is the world's largest software registry of packages for the Node.js runtime.
+  Npm is the world's largest software registry of packages for the Node.js runtime.
 tool_docs: https://docs.npmjs.com/
 
 date: 2023-03-27
@@ -32,7 +32,7 @@ npm ERR! unable to get local issuer certificate
 
 Npm has multiple configurations to enable additional trusted certificates.
 
-Npm supports the `NODE_EXTRA_CA_CERTS` environment variable as described in the guide for [Node.js]({{ '/docs/tool-list/node' | relative_url }}).
+Npm supports the `NODE_EXTRA_CA_CERTS` environment variable as described in the guide for [Node.js]({{ '/tools/node' | relative_url }}).
 
 In isolation, Npm can be configured to use a central file for trusted certificates (bundle file) in [pem - Base64 format](https://en.wikipedia.org/wiki/Privacy-Enhanced_Mail). This configuration can be done by using the following command (make entries into `.npmrc` file):
 
