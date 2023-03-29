@@ -197,7 +197,17 @@ However, it's important to note that relying on self-signed certificates for sec
 
 A server's SSL certificate may be missing one or more intermediate certificates in its chain, which are needed to establish trust between the root CA and the server's certificate.
 
-### Investigate using curl
+{% comment %}
+### Investigate with the browser
+
+If you know the url which your framework or app requested while the error occurred, you can simply put in into your browser and see what happens. Here you might see immediately that the server certificate is not trustworthy because the address bar of the browser highlights this for you. To investigate further you might be able to click on the the padlock (or crossed-through 'https://' text) to open a small dialog showing some details. In this dialog you can always find a button or link that shows details of the server certificate. For example:
+
+- Microsoft Edge
+- Google Chrome
+- Mozilla Firefox
+{% endcomment %}
+
+### Investigate with curl
 
 When you have curl installed on your machine you can investigate certificate issues using the command-line. This is especially handy when the framework or app that thew the issue uses libcurl under the hood to perform its network traffic.
 
@@ -208,101 +218,90 @@ curl -iLv https://github.com
 ```
 
 {: .note}
-`-i` to include the HTTP response headers in the output.
-`-L` to include HTTP location headers in the output.
-`-v` Outputs the previous infos in a verbose manner.
+`-i` to include the HTTP response headers in the output.<br>
+`-L` to include HTTP location headers in the output.<br>
+`-v` Outputs the previous infos in a verbose manner.<br>
 
 An output can look like this:
 
-```text
-* Uses proxy env variable https_proxy == 'http://localhost:9000'
-*   Trying 127.0.0.1:9000...
-* Connected to localhost (127.0.0.1) port 9000 (#0)
-* allocate connect buffer
-* Establish HTTP proxy tunnel to github.com:443
-> CONNECT github.com:443 HTTP/1.1
-> Host: github.com:443
-> User-Agent: curl/8.0.1
-> Proxy-Connection: Keep-Alive
->
-< HTTP/1.1 200 Connection Established
-HTTP/1.1 200 Connection Established
-< Proxy-Agent: ...
-Proxy-Agent: ...
-<
+```diff
+> * Uses proxy env variable https_proxy == 'http://localhost:9000'
+> *   Trying 127.0.0.1:9000...
+> * Connected to localhost (127.0.0.1) port 9000 (#0)
+ * allocate connect buffer
+ * Establish HTTP proxy tunnel to github.com:443
+ > CONNECT github.com:443 HTTP/1.1
+ > Host: github.com:443
+ > User-Agent: curl/8.0.1
+ > Proxy-Connection: Keep-Alive
+ >
+ < HTTP/1.1 200 Connection Established
+ HTTP/1.1 200 Connection Established
+ < Proxy-Agent: ...
+ Proxy-Agent: ...
+ <
 
-* CONNECT phase completed
-* CONNECT tunnel established, response 200
-* ALPN: offers h2,http/1.1
-* TLSv1.3 (OUT), TLS handshake, Client hello (1):
-*  CAfile: ...
-*  CApath: ...
-* TLSv1.3 (IN), TLS handshake, Server hello (2):
-* TLSv1.3 (IN), TLS handshake, Encrypted Extensions (8):
-* TLSv1.3 (IN), TLS handshake, Certificate (11):
-* TLSv1.3 (IN), TLS handshake, CERT verify (15):
-* TLSv1.3 (IN), TLS handshake, Finished (20):
-* TLSv1.3 (OUT), TLS change cipher, Change cipher spec (1):
-* TLSv1.3 (OUT), TLS handshake, Finished (20):
-* SSL connection using TLSv1.3 / TLS_AES_128_GCM_SHA256
-* ALPN: server accepted h2
-* Server certificate:
-*  subject: C=US; ST=California; L=San Francisco; O=GitHub, Inc.; CN=github.com
-*  start date: ...
-*  expire date: ...
-*  subjectAltName: host "github.com" matched cert's "github.com"
-*  issuer: C=US; O=DigiCert Inc; CN=DigiCert TLS Hybrid ECC SHA384 2020 CA1
-*  SSL certificate verify ok.
-* using HTTP/2
-* h2h3 [:method: GET]
-* h2h3 [:path: /]
-* h2h3 [:scheme: https]
-* h2h3 [:authority: github.com]
-* h2h3 [user-agent: curl/8.0.1]
-* h2h3 [accept: */*]
-* Using Stream ID: ....
-> GET / HTTP/2
-> Host: github.com
-> user-agent: curl/8.0.1
-> accept: */*
->
-* TLSv1.3 (IN), TLS handshake, Newsession Ticket (4):
-* TLSv1.3 (IN), TLS handshake, Newsession Ticket (4):
-...
-<HTTP HEADERS / HTML content>
+ * CONNECT phase completed
+ * CONNECT tunnel established, response 200
+ * ALPN: offers h2,http/1.1
+ * TLSv1.3 (OUT), TLS handshake, Client hello (1):
+> *  CAfile: ...
+> *  CApath: ...
+ * TLSv1.3 (IN), TLS handshake, Server hello (2):
+ * TLSv1.3 (IN), TLS handshake, Encrypted Extensions (8):
+ * TLSv1.3 (IN), TLS handshake, Certificate (11):
+> * TLSv1.3 (IN), TLS handshake, CERT verify (15):
+ * TLSv1.3 (IN), TLS handshake, Finished (20):
+ * TLSv1.3 (OUT), TLS change cipher, Change cipher spec (1):
+ * TLSv1.3 (OUT), TLS handshake, Finished (20):
+ * SSL connection using TLSv1.3 / TLS_AES_128_GCM_SHA256
+ * ALPN: server accepted h2
+ * Server certificate:
+ *  subject: C=US; ST=California; L=San Francisco; O=GitHub, Inc.; CN=github.com
+ *  start date: ...
+ *  expire date: ...
+ *  subjectAltName: host "github.com" matched cert's "github.com"
+ *  issuer: C=US; O=DigiCert Inc; CN=DigiCert TLS Hybrid ECC SHA384 2020 CA1
+> *  SSL certificate verify ok.
+ * using HTTP/2
+ ...
+ <HTTP HEADERS / HTML content>
 ```
 
-The first lines show us that the communication goes through a proxy (for test purposes here). This fact often gets overlooked when investigating certificate issues. The certificate issues might already occur in the communication with your proxy and not event the target website.
+I've highlighted the most important lines here. The first lines show us that the communication goes through a proxy (for test purposes here). This fact often gets overlooked when investigating certificate issues. The certificate issues might already occur in the communication with your proxy and not event the target website.
 
 The next lines show the SSL/TLS handshake with the target website (here: github.com). The first important lines here are the used `CAfile/CApath` configurations. This is the source for trusted certificates. When we have issues as explained in the other paragraphs, then it is very likely that it has to do with the state of this configuration. After that we focus on the part that says `CERT verify`. When there are issues with the root CA certificate or the certificate chain, errors will pop up here.
 
 An error output would look like this:
 
-```text
+```diff
 ...
 
-*  CAfile: ...
-*  CApath: ...
-* TLSv1.3 (IN), TLS handshake, Server hello (2):
-* TLSv1.3 (OUT), TLS change cipher, Change cipher spec (1):
-* TLSv1.3 (OUT), TLS handshake, Client hello (1):
-* TLSv1.3 (IN), TLS handshake, Server hello (2):
-* TLSv1.3 (IN), TLS handshake, Encrypted Extensions (8):
-* TLSv1.3 (IN), TLS handshake, Certificate (11):
-* TLSv1.3 (OUT), TLS alert, unknown CA (560):
-* SSL certificate problem: unable to get local issuer certificate
-* Closing connection 0
-curl: (60) SSL certificate problem: unable to get local issuer certificate
+> *  CAfile: ...
+> *  CApath: ...
+ * TLSv1.3 (IN), TLS handshake, Server hello (2):
+ * TLSv1.3 (OUT), TLS change cipher, Change cipher spec (1):
+ * TLSv1.3 (OUT), TLS handshake, Client hello (1):
+ * TLSv1.3 (IN), TLS handshake, Server hello (2):
+ * TLSv1.3 (IN), TLS handshake, Encrypted Extensions (8):
+< * TLSv1.3 (IN), TLS handshake, Certificate (11):
+< * TLSv1.3 (OUT), TLS alert, unknown CA (560):
+< * SSL certificate problem: unable to get local issuer certificate
+ * Closing connection 0
+ curl: (60) SSL certificate problem: unable to get local issuer certificate
 
 ...
 ```
 
-And here is the error this page is dedicated to 😄.
+And here is the error this page is dedicated to 😄 (highlighted in red).<br>
 Since the error/alert says `unknown CA`, we can conclude that the provided `CAfile/CApath` configuration does not contain information about **C**ertificate **A**uthority of the given server certificate. Usually this means the root CA certificate is not part of our certificate store.
 To investigate further we might use openSSL.
 
+{% comment %}
 ### Investigate with openSSL
 
-Coming soon™...
+If you have [openSSL](https://www.openssl.org/) installed, you can investigate problems of server certificates using the following commands:
+
 
 <!-- TODO: add CURL and openSSL investigation (https://curl.se/docs/sslcerts.html) -->
+{% endcomment %}

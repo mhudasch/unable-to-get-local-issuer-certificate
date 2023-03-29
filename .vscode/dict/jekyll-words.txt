@@ -1,4 +1,4 @@
-endcommend
+endcomment
 endfor
 endif
 endcapture
