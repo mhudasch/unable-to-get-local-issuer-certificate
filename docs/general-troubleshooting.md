@@ -197,15 +197,23 @@ However, it's important to note that relying on self-signed certificates for sec
 
 A server's SSL certificate may be missing one or more intermediate certificates in its chain, which are needed to establish trust between the root CA and the server's certificate.
 
-{% comment %}
 ### Investigate with the browser
 
 If you know the url which your framework or app requested while the error occurred, you can simply put in into your browser and see what happens. Here you might see immediately that the server certificate is not trustworthy because the address bar of the browser highlights this for you. To investigate further you might be able to click on the the padlock (or crossed-through 'https://' text) to open a small dialog showing some details. In this dialog you can always find a button or link that shows details of the server certificate. For example:
 
 - Microsoft Edge
+
+  ![Microsoft Edge]({{ '/assets/img/edge-cert.png' | relative_url }})
+
 - Google Chrome
+
+  ![Google Chrome]({{ '/assets/img/chrome-cert.png' | relative_url }})
+
 - Mozilla Firefox
-{% endcomment %}
+
+  ![Mozilla Firefox]({{ '/assets/img/firefox-cert.png' | relative_url }})
+
+The highlighted buttons open a dialog containing details of the server's SSL certificate. The detail dialogs also contain a tree-like structure that can be opened and closed. This structure represents the so-called certificate chain. It starts with the root CA certificate, sometimes some intermediate certificates and finally the server's SSL certificate on the last level (leaf). You can open each node in the tree and see the details for the certificate on that level of the tree. Here you can investigate if and why the certificate is not trustworthy. You can for example check if it is expired or if it has been revoked. If you encounter the `unable to get local issuer certificate` issue either the whole tree or parts of the certificate tree is missing.
 
 ### Investigate with curl
 
@@ -297,11 +305,132 @@ And here is the error this page is dedicated to 😄 (highlighted in red).<br>
 Since the error/alert says `unknown CA`, we can conclude that the provided `CAfile/CApath` configuration does not contain information about **C**ertificate **A**uthority of the given server certificate. Usually this means the root CA certificate is not part of our certificate store.
 To investigate further we might use openSSL.
 
-{% comment %}
 ### Investigate with openSSL
 
 If you have [openSSL](https://www.openssl.org/) installed, you can investigate problems of server certificates using the following commands:
 
+```bash
+openssl s_client -connect < url without https:// >:443 -showcerts
+```
 
-<!-- TODO: add CURL and openSSL investigation (https://curl.se/docs/sslcerts.html) -->
-{% endcomment %}
+When you are behind a proxy you have to add it to the commnd:
+
+```bash
+openssl s_client -connect < url without https:// >:443 -showcerts -proxy < host:port of proxy without http(s):// >
+```
+
+An output for `https://github.com` would look like this:
+
+```diff
+openssl s_client -connect github.com:443 -showcerts
+
+ CONNECTED(000001B8)
+> depth=1 C = US, O = DigiCert Inc, CN = DigiCert TLS Hybrid ECC SHA384 2020 CA1
+< verify error:num=20:unable to get local issuer certificate
+ verify return:1
+> depth=0 C = US, ST = California, L = San Francisco, O = "GitHub, Inc.", CN = github.com
+ verify return:1
+ ---
+> Certificate chain
+>  0 s:C = US, ST = California, L = San Francisco, O = "GitHub, Inc.", CN = github.com
+>    i:C = US, O = DigiCert Inc, CN = DigiCert TLS Hybrid ECC SHA384 2020 CA1
+ -----BEGIN CERTIFICATE-----
+ ...<x509 base64 certificate>...
+ -----END CERTIFICATE-----
+>  1 s:C = US, O = DigiCert Inc, CN = DigiCert TLS Hybrid ECC SHA384 2020 CA1
+>    i:C = US, O = DigiCert Inc, OU = www.digicert.com, CN = DigiCert Global Root CA
+ -----BEGIN CERTIFICATE-----
+ ...<x509 base64 certificate>...
+ -----END CERTIFICATE-----
+ ---
+ Server certificate
+ subject=C = US, ST = California, L = San Francisco, O = "GitHub, Inc.", CN = github.com
+ 
+ issuer=C = US, O = DigiCert Inc, CN = DigiCert TLS Hybrid ECC SHA384 2020 CA1
+ 
+ ---
+ No client certificate CA names sent
+ Peer signing digest: SHA256
+ Peer signature type: ECDSA
+ Server Temp Key: X25519, 253 bits
+ ---
+ SSL handshake has read 2870 bytes and written 411 bytes
+< Verification error: unable to get local issuer certificate
+ ---
+ New, TLSv1.3, Cipher is TLS_AES_128_GCM_SHA256
+ Server public key is 256 bit
+ Secure Renegotiation IS NOT supported
+ Compression: NONE
+ Expansion: NONE
+ No ALPN negotiated
+ Early data was not sent
+< Verify return code: 20 (unable to get local issuer certificate)
+ ---
+
+...<rest>...
+```
+
+As you can see from the output, the certificate chain is as follows:
+
+- Level 0 (leaf) - The website server certificate for github.com
+- Level 1 (intermediate) - The certificate (given by DigiCert) that issued the certificate for github.com
+- Level 2 (root) - The root CA certificate (given by DigiCert) that issued the intermediate certificate
+
+You can see that the root CA does not get its own index because the verification of the root CA failed with error highlighted in red (num:20). As a consequence the whole certificate chain can not be trusted (the further down errors in red).
+In the sample the certificate store that openSSL used didn't contain information about the `DigiCert Global Root CA` certificate and the familiar `unable to get local issuer certificate` error shows up.
+
+When we include a certificate store (here a single crt file containing all root CA certificates) the error disappears:
+
+```diff
+openssl s_client -connect github.com:443 -showcerts -CAfile ~/ssl/ca-trusted.crt
+
+ CONNECTED(000001B4)
+> depth=2 C = US, O = DigiCert Inc, OU = www.digicert.com, CN = DigiCert Global Root CA
+> verify return:1
+ depth=1 C = US, O = DigiCert Inc, CN = DigiCert TLS Hybrid ECC SHA384 2020 CA1
+ verify return:1
+ depth=0 C = US, ST = California, L = San Francisco, O = "GitHub, Inc.", CN = github.com
+ verify return:1
+ ---
+ Certificate chain
+  0 s:C = US, ST = California, L = San Francisco, O = "GitHub, Inc.", CN = github.com
+    i:C = US, O = DigiCert Inc, CN = DigiCert TLS Hybrid ECC SHA384 2020 CA1
+ -----BEGIN CERTIFICATE-----
+ ...<x509 base64 certificate>...
+ -----END CERTIFICATE-----
+  1 s:C = US, O = DigiCert Inc, CN = DigiCert TLS Hybrid ECC SHA384 2020 CA1
+    i:C = US, O = DigiCert Inc, OU = www.digicert.com, CN = DigiCert Global Root CA
+ -----BEGIN CERTIFICATE-----
+ ...<x509 base64 certificate>...
+ -----END CERTIFICATE-----
+ ---
+ Server certificate
+ subject=C = US, ST = California, L = San Francisco, O = "GitHub, Inc.", CN = github.com
+ 
+ issuer=C = US, O = DigiCert Inc, CN = DigiCert TLS Hybrid ECC SHA384 2020 CA1
+ 
+ ---
+ No client certificate CA names sent
+ Peer signing digest: SHA256
+ Peer signature type: ECDSA
+ Server Temp Key: X25519, 253 bits
+ ---
+ SSL handshake has read 2869 bytes and written 411 bytes
+> Verification: OK
+ ---
+ New, TLSv1.3, Cipher is TLS_AES_128_GCM_SHA256
+ Server public key is 256 bit
+ Secure Renegotiation IS NOT supported
+ Compression: NONE
+ Expansion: NONE
+ No ALPN negotiated
+ Early data was not sent
+> Verify return code: 0 (ok)
+ ---
+
+...<rest>...
+```
+
+Now we can see the root CA certificate at the level 2 as is has been verified successfully (return:1). Also the whole chain has now been verified as well (OK).
+
+As the used certificate store could verify all certificates in the chain, this is a good certificate store file to use with other tools as described in the other guides [here]({{ '/tools' | relative_url }}).
