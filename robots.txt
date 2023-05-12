@@ -1,7 +1,5 @@
----
-permalink: /robots.txt
----
-User-agent: *
-Disallow:
+# www.robotstxt.org/
 
-Sitemap: {{ site.baseurl | prepend: site.url }}/sitemap.xml
+# Allow crawling of all content
+User-agent: *
+Disallow: /assets/

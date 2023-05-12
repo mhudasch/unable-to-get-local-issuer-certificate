@@ -1,7 +1,7 @@
 // cSpell Settings
 {
-  // Version of the setting file.  Always 0.1
-  "version": "0.1",
+  // Version of the setting file.  Always 0.2
+  "version": "0.2",
   // language - current active spelling language
   "language": "en",
   // words - list of words to be always considered correct
@@ -21,19 +21,25 @@
     {
       "name": "techWordsEn",
       "path": "./dict/tech-words-en.txt"
+    },
+    {
+      "name": "jekyllWords",
+      "path": "./dict/jekyll-words.txt"
     }
   ],
   "dictionaries": [
     "commonWordsEn",
-    "techWordsEn"
+    "techWordsEn",
+    "jekyllWords"
   ],
   "languageSettings": [
     {
       "languageId": "*",
-      "local": "en",
+      "locale": "en",
       "dictionaries": [
         "commonWordsEn",
-        "techWordsEn"
+        "techWordsEn",
+        "jekyllWords"
       ]
     }
   ]
